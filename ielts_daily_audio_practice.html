@@ -1,0 +1,766 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IELTS Daily Audio Practice</title>
+<style>
+  :root {
+    --bg: #f6f7f4;
+    --paper: #ffffff;
+    --ink: #1f2723;
+    --muted: #65716b;
+    --line: #dfe5dc;
+    --green: #2f6f55;
+    --green-dark: #1f543f;
+    --gold: #b9822b;
+    --blue: #2d638f;
+    --shadow: 0 14px 36px rgba(31, 39, 35, 0.08);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.6;
+  }
+
+  button {
+    font: inherit;
+  }
+
+  .shell {
+    display: grid;
+    grid-template-columns: 280px minmax(0, 1fr);
+    min-height: 100vh;
+  }
+
+  aside {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    padding: 28px 18px;
+    background: #eef2ec;
+    border-right: 1px solid var(--line);
+    overflow-y: auto;
+  }
+
+  .brand {
+    margin-bottom: 24px;
+  }
+
+  .brand h1 {
+    margin: 0 0 8px;
+    font-size: 24px;
+    line-height: 1.15;
+  }
+
+  .brand p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  .date-list {
+    display: grid;
+    gap: 10px;
+  }
+
+  .date-button {
+    width: 100%;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--paper);
+    padding: 12px;
+    color: var(--ink);
+    cursor: pointer;
+    text-align: left;
+  }
+
+  .date-button.active {
+    border-color: var(--green);
+    background: #e2eee7;
+    box-shadow: inset 4px 0 0 var(--green);
+  }
+
+  .date-button strong {
+    display: block;
+    font-size: 16px;
+  }
+
+  .date-button span {
+    display: block;
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  main {
+    max-width: 1060px;
+    width: 100%;
+    padding: 30px 24px 80px;
+    margin: 0 auto;
+  }
+
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 3;
+    display: flex;
+    justify-content: space-between;
+    gap: 14px;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 14px 0;
+    background: rgba(246, 247, 244, 0.94);
+    border-bottom: 1px solid var(--line);
+    backdrop-filter: blur(10px);
+  }
+
+  .tabs,
+  .actions,
+  .card-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .tab-button,
+  .action-button {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--paper);
+    min-height: 38px;
+    padding: 8px 12px;
+    color: var(--ink);
+    cursor: pointer;
+  }
+
+  .tab-button.active {
+    border-color: var(--blue);
+    background: #e7f0f7;
+    color: #174360;
+  }
+
+  .action-button.primary {
+    border-color: var(--green);
+    background: var(--green);
+    color: white;
+  }
+
+  .action-button.warning {
+    border-color: #d6c4a5;
+    background: #fff7e8;
+    color: #6f4712;
+  }
+
+  .hero {
+    padding: 26px 0 16px;
+  }
+
+  .hero h2 {
+    margin: 0 0 6px;
+    font-size: 30px;
+    line-height: 1.2;
+  }
+
+  .hero p {
+    margin: 0;
+    color: var(--muted);
+  }
+
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    margin: 14px 0 22px;
+  }
+
+  .stat {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 14px;
+  }
+
+  .stat strong {
+    display: block;
+    font-size: 22px;
+  }
+
+  .stat span {
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  .section-title {
+    margin: 28px 0 12px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--line);
+    font-size: 20px;
+  }
+
+  .grid {
+    display: grid;
+    gap: 12px;
+  }
+
+  .card,
+  .sentence-card {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 15px 16px;
+    box-shadow: 0 1px 4px rgba(31, 39, 35, 0.03);
+  }
+
+  .card-top,
+  .sentence-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 14px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .word-line,
+  .sentence-text {
+    flex: 1 1 360px;
+    min-width: 0;
+  }
+
+  .num {
+    color: var(--muted);
+    margin-right: 6px;
+    font-weight: 700;
+  }
+
+  .ipa {
+    color: var(--muted);
+    margin-left: 6px;
+  }
+
+  .meaning {
+    color: var(--green-dark);
+  }
+
+  .example {
+    margin: 10px 0 0;
+    color: #39433e;
+  }
+
+  .clean-text {
+    white-space: pre-wrap;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 16px;
+    overflow-x: auto;
+  }
+
+  .empty-state {
+    background: var(--paper);
+    border: 1px dashed #c8d2c8;
+    border-radius: 8px;
+    padding: 18px;
+    color: var(--muted);
+  }
+
+  .hidden {
+    display: none;
+  }
+
+  @media (max-width: 820px) {
+    .shell {
+      display: block;
+    }
+
+    aside {
+      position: static;
+      height: auto;
+      padding: 20px 16px 12px;
+      border-right: 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .date-list {
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    }
+
+    main {
+      padding: 18px 16px 60px;
+    }
+
+    .topbar {
+      top: 0;
+    }
+
+    .hero h2 {
+      font-size: 24px;
+    }
+
+    .stats {
+      grid-template-columns: 1fr;
+    }
+
+    .card-actions,
+    .card-actions .action-button {
+      width: 100%;
+    }
+
+    .card-actions .action-button,
+    .sentence-top .action-button {
+      justify-content: center;
+    }
+  }
+</style>
+</head>
+<body>
+<div class="shell">
+  <aside>
+    <div class="brand">
+      <h1>IELTS Daily Audio Practice</h1>
+      <p>按学习日期管理单词背诵发音和文章单句跟读。</p>
+    </div>
+    <div class="date-list" id="dateList"></div>
+  </aside>
+
+  <main>
+    <div class="topbar">
+      <div class="tabs">
+        <button class="tab-button active" type="button" data-tab="vocabulary">单词发音</button>
+        <button class="tab-button" type="button" data-tab="sentences">文章单句</button>
+      </div>
+      <div class="actions">
+        <button class="action-button primary" type="button" id="playCurrent">Play Current</button>
+        <button class="action-button warning" type="button" id="stopAudio">Stop</button>
+      </div>
+    </div>
+
+    <section class="hero">
+      <h2 id="studyTitle"></h2>
+      <p id="studyMeta"></p>
+    </section>
+
+    <section class="stats" aria-label="learning stats">
+      <div class="stat"><strong id="wordCount">0</strong><span>单词</span></div>
+      <div class="stat"><strong id="sentenceCount">0</strong><span>文章句子</span></div>
+      <div class="stat"><strong id="topicCount">0</strong><span>单词主题</span></div>
+    </section>
+
+    <section id="vocabularyPanel"></section>
+    <section id="sentencesPanel" class="hidden"></section>
+  </main>
+</div>
+
+<script>
+const studyData = [
+  {
+    date: "2026-06-04",
+    label: "6月4日",
+    title: "June 4 IELTS Practice",
+    sourceNote: "参考 6.4 号文件：IELTS Vocabulary Audio Practice / Mount Huang Sentence Audio Practice",
+    vocabulary: [
+      {
+        category: "一、性格、态度与行为类",
+        words: [
+          { word: "Tame", ipa: "/teɪm/", meaning: "驯服的；平淡的", example: "It was difficult to tame the wild horse, but he eventually succeeded." },
+          { word: "Submissive", ipa: "/səbˈmɪsɪv/", meaning: "顺从的；服从的", example: "She was never a submissive person; she always speaks her mind." },
+          { word: "Docile", ipa: "/ˈdɑːsəl/", meaning: "温顺的；容易控制的", example: "The dog is very docile, so you don’t need to worry about it biting anyone." },
+          { word: "Lax", ipa: "/læks/", meaning: "松散的；不严格的；马虎的", example: "The company has lax rules." },
+          { word: "Capricious", ipa: "/kəˈprɪʃəs/", meaning: "反复无常的；任性的；变化无常的", example: "A capricious person may change their decision suddenly." },
+          { word: "Resilient", ipa: "/rɪˈzɪliənt/", meaning: "有韧性的；能恢复的", example: "She is resilient and can recover quickly from failure." },
+          { word: "Aspire", ipa: "/əˈspaɪər/", meaning: "渴望；有志于", example: "Many young students aspire to study at top universities." },
+          { word: "Inspire", ipa: "/ɪnˈspaɪər/", meaning: "激励；启发", example: "Her story inspired me to keep learning." }
+        ]
+      },
+      {
+        category: "二、规则、标准与要求类",
+        words: [
+          { word: "Stringent", ipa: "/ˈstrɪndʒənt/", meaning: "严格的；严苛的；要求高的", example: "The company has stringent rules." },
+          { word: "Rigorous", ipa: "/ˈrɪɡərəs/", meaning: "严谨的；严格的", example: "The company has rigorous standards for hiring new employees." },
+          { word: "Criterion", ipa: "/kraɪˈtɪriən/", meaning: "标准；准则（单数）", example: "The main criterion for this job is communication ability." },
+          { word: "Criteria", ipa: "/kraɪˈtɪriə/", meaning: "标准；准则（复数）", example: "The school uses several criteria to choose students." },
+          { word: "Consistency", ipa: "/kənˈsɪstənsi/", meaning: "一致性；持续性", example: "Consistency is important when building a learning habit." },
+          { word: "Permanence", ipa: "/ˈpɜːrmənəns/", meaning: "持久性；永久性；稳定存在", example: "The permanence of habits is important." }
+        ]
+      },
+      {
+        category: "三、工作、组织与职场类",
+        words: [
+          { word: "Company", ipa: "/ˈkʌmpəni/", meaning: "公司；陪伴", example: "I enjoy her company." },
+          { word: "Companion", ipa: "/kəmˈpænjən/", meaning: "同伴；陪伴者", example: "A good book can be a great companion during a long flight." },
+          { word: "Compensation", ipa: "/ˌkɑːmpənˈseɪʃən/", meaning: "薪酬；报酬；补偿", example: "I want to discuss my compensation because my responsibilities have increased." },
+          { word: "Resignation", ipa: "/ˌrezɪɡˈneɪʃən/", meaning: "辞职；辞呈；顺从地接受", example: "After much thought, she handed in her letter of resignation." },
+          { word: "Query", ipa: "/ˈkwɪri/", meaning: "问题；询问；质疑", example: "If you have a query, you can ask the teacher directly." },
+          { word: "Escort", ipa: "/ˈeskɔːrt/", meaning: "护送；陪同", example: "The security guard will escort you to the meeting room." }
+        ]
+      },
+      {
+        category: "四、流程、动作与执行类",
+        words: [
+          { word: "Commence", ipa: "/kəˈmens/", meaning: "开始；着手", example: "The graduation ceremony will commence at exactly 10 o’clock." },
+          { word: "Conclude", ipa: "/kənˈkluːd/", meaning: "结束；得出结论", example: "We can conclude that daily practice is helpful." },
+          { word: "Execute", ipa: "/ˈeksɪkjuːt/", meaning: "执行；实施", example: "The team needs to execute the plan carefully." },
+          { word: "Halt", ipa: "/hɔːlt/", meaning: "停止；暂停", example: "The project had to halt because of a lack of funding." },
+          { word: "Expedite", ipa: "/ˈekspədaɪt/", meaning: "加快；加速处理", example: "Could you help expedite the payment process?" },
+          { word: "Yield", ipa: "/jiːld/", meaning: "屈服；让步；产出", example: "You should yield to the traffic coming from the right at this intersection." },
+          { word: "Contradict", ipa: "/ˌkɑːntrəˈdɪkt/", meaning: "反驳；与……矛盾", example: "His actions often contradict his words." }
+        ]
+      },
+      {
+        category: "五、经济、法律与金钱类",
+        words: [
+          { word: "Rental", ipa: "/ˈrentəl/", meaning: "租金；租赁的", example: "The rental price in this area is quite high." },
+          { word: "Tax", ipa: "/tæks/", meaning: "税；税收", example: "Everyone has to pay income tax." },
+          { word: "Subsidize", ipa: "/ˈsʌbsɪdaɪz/", meaning: "资助；补贴", example: "The government decided to subsidize public transport to reduce traffic." },
+          { word: "Indemnity", ipa: "/ɪnˈdemnəti/", meaning: "赔偿；补偿金；保险赔偿", example: "He signed the contract to receive indemnity in case of an accident." }
+        ]
+      },
+      {
+        category: "六、公告、声明与正式表达类",
+        words: [
+          { word: "Proclamation", ipa: "/ˌprɑːkləˈmeɪʃən/", meaning: "公告；宣告；正式声明", example: "The government issued a proclamation." },
+          { word: "Declaration", ipa: "/ˌdekləˈreɪʃən/", meaning: "声明；宣言；宣布", example: "The company made a public declaration about its new policy." }
+        ]
+      },
+      {
+        category: "七、状态与感受类",
+        words: [
+          { word: "Enchanted", ipa: "/ɪnˈtʃæntɪd/", meaning: "被迷住的；陶醉的；喜悦的", example: "The children were enchanted by the beautiful magic show." },
+          { word: "Stagnant", ipa: "/ˈstæɡnənt/", meaning: "停滞的；不发展的", example: "Economic growth has been stagnant for the past few years." },
+          { word: "Sluggish", ipa: "/ˈslʌɡɪʃ/", meaning: "迟缓的；没精神的；进展缓慢的", example: "I felt sluggish this morning because I didn’t sleep well." }
+        ]
+      },
+      {
+        category: "八、身体与健康类",
+        words: [
+          { word: "Swallow", ipa: "/ˈswɑːloʊ/", meaning: "吞咽；燕子", example: "It was difficult for him to swallow the medicine." },
+          { word: "Swelling", ipa: "/ˈswelɪŋ/", meaning: "肿胀；肿起来的地方", example: "There is some swelling around my ankle." },
+          { word: "Soreness", ipa: "/ˈsɔːrnəs/", meaning: "酸痛；疼痛感", example: "I felt some muscle soreness after exercising." }
+        ]
+      },
+      {
+        category: "九、努力与学习类",
+        words: [
+          { word: "Grind", ipa: "/ɡraɪnd/", meaning: "磨碎；苦干；枯燥但持续的努力", example: "Learning English is a daily grind, but it can bring long-term results." }
+        ]
+      },
+      {
+        category: "十、七宗罪相关词汇",
+        words: [
+          { word: "Pride", ipa: "/praɪd/", meaning: "傲慢", example: "Pride can stop people from admitting their mistakes." },
+          { word: "Greed", ipa: "/ɡriːd/", meaning: "贪婪", example: "Greed can make people ignore what they already have." },
+          { word: "Greedy", ipa: "/ˈɡriːdi/", meaning: "贪婪的", example: "He became greedy after making a lot of money." },
+          { word: "Lust", ipa: "/lʌst/", meaning: "色欲；强烈欲望", example: "Lust is often described as an uncontrolled desire." },
+          { word: "Envy", ipa: "/ˈenvi/", meaning: "嫉妒", example: "Envy can make people unhappy with their own lives." },
+          { word: "Jealous", ipa: "/ˈdʒeləs/", meaning: "嫉妒的", example: "She felt jealous when her friend got the opportunity." },
+          { word: "Gluttony", ipa: "/ˈɡlʌtəni/", meaning: "暴食；贪吃", example: "Gluttony means eating or consuming too much." },
+          { word: "Anorexia", ipa: "/ˌænəˈreksiə/", meaning: "厌食；厌食症", example: "Anorexia can seriously affect a person’s physical and mental health." },
+          { word: "Wrath", ipa: "/ræθ/", meaning: "暴怒；愤怒", example: "Wrath can make people say hurtful things." },
+          { word: "Sloth", ipa: "/sloʊθ/", meaning: "懒惰", example: "Sloth can prevent people from reaching their goals." }
+        ]
+      }
+    ],
+    article: {
+      title: "Describe a time when you got up early",
+      sentences: [
+        "Speaking of a time when I got up early, I’d like to talk about my trip to Mount Huang last October.",
+        "I went there with my boyfriend, and he accompanied me during the whole trip.",
+        "We had to get up early to catch the high-speed railway from Shanghai to the nearest town near Mount Huang.",
+        "We prepared a lot of snacks, water, beverages, and fruit for the journey to the top of the mountain.",
+        "After we arrived, we bought tickets at the entrance, and we also bought tickets for the cable car.",
+        "After getting off the cable car, we started our long walk.",
+        "In the beginning, I felt very powerful and energetic, but a few minutes later, I felt a bit tired.",
+        "I needed to take a rest, eat some fruit, and drink some water.",
+        "Then we continued our long walk.",
+        "We marked some scenic spots in advance and tried our best to reach the top of the mountain before sunset.",
+        "This was because when evening came, most of the lights were off, and the weather became cold.",
+        "We found a youth hostel to settle down on the top of the mountain.",
+        "We stayed there to prepare for the sunrise the next morning.",
+        "In the morning, we got up early to catch the first sight of the sunrise.",
+        "It was so exciting to see the sunrise and feel the warmth of the sun, even though it was October.",
+        "After seeing the sunrise, I felt the whole long walk was worth it because I was healed by the power of nature and the beautiful scenery of Mount Huang.",
+        "If I have a few days off in the near future, I may visit Mount Huang again."
+      ]
+    }
+  },
+  {
+    date: "2026-06-12",
+    label: "6月12日",
+    title: "June 12 IELTS Vocabulary Practice",
+    sourceNote: "今日新增词汇：情绪动作、工作健康、学习状态、表达精度与个性化训练",
+    vocabulary: [
+      {
+        category: "一、动作与活动类",
+        words: [
+          { word: "Hugged", ipa: "/hʌɡd/", meaning: "拥抱了；抱住了", example: "She hugged her friend when they met at the station." },
+          { word: "Adopted", ipa: "/əˈdɑːptɪd/", meaning: "采用了；收养了", example: "The school adopted a new method to help students learn faster." },
+          { word: "Renting", ipa: "/ˈrentɪŋ/", meaning: "租用；租住", example: "Renting an apartment near the city center can be expensive." },
+          { word: "Fun", ipa: "/fʌn/", meaning: "有趣的；乐趣", example: "The event was fun because everyone joined the games." },
+          { word: "Event", ipa: "/ɪˈvent/", meaning: "活动；事件", example: "The charity event attracted many local families." },
+          { word: "Registered", ipa: "/ˈredʒɪstərd/", meaning: "注册的；登记过的", example: "Only registered users can enter the online course." }
+        ]
+      },
+      {
+        category: "二、工作与法律状态类",
+        words: [
+          { word: "Employment", ipa: "/ɪmˈplɔɪmənt/", meaning: "就业；雇佣；工作", example: "Stable employment can give people a stronger sense of security." },
+          { word: "Termination", ipa: "/ˌtɜːrmɪˈneɪʃən/", meaning: "终止；结束；解雇", example: "The company announced the termination of the contract." }
+        ]
+      },
+      {
+        category: "三、身体与健康类",
+        words: [
+          { word: "Toothache", ipa: "/ˈtuːθeɪk/", meaning: "牙痛", example: "I had a terrible toothache and had to see a dentist." },
+          { word: "Inflammation", ipa: "/ˌɪnfləˈmeɪʃən/", meaning: "炎症；发炎", example: "The doctor said the pain was caused by inflammation." },
+          { word: "Immune", ipa: "/ɪˈmjuːn/", meaning: "免疫的；不受影响的", example: "A healthy diet can support your immune system." }
+        ]
+      },
+      {
+        category: "四、学习、环境与状态类",
+        words: [
+          { word: "Laboratory", ipa: "/ˈlæbrətɔːri/", meaning: "实验室", example: "The students did the experiment in the laboratory." },
+          { word: "Hectic", ipa: "/ˈhektɪk/", meaning: "忙乱的；繁忙的", example: "My schedule was hectic before the final exam." },
+          { word: "Cluttered", ipa: "/ˈklʌtərd/", meaning: "凌乱的；杂乱的", example: "A cluttered desk can make it harder to focus." },
+          { word: "Latent", ipa: "/ˈleɪtnt/", meaning: "潜在的；潜伏的", example: "She has latent talent that may appear with more practice." }
+        ]
+      },
+      {
+        category: "五、精确表达与思考类",
+        words: [
+          { word: "Meticulous", ipa: "/məˈtɪkjələs/", meaning: "一丝不苟的；细致的", example: "She is meticulous when checking her IELTS writing." },
+          { word: "Precisely", ipa: "/prɪˈsaɪsli/", meaning: "精确地；正是如此", example: "Please explain your idea precisely in one or two sentences." },
+          { word: "Pivot", ipa: "/ˈpɪvət/", meaning: "转向；关键点；枢轴", example: "The team had to pivot when the original plan failed." },
+          { word: "Pilot", ipa: "/ˈpaɪlət/", meaning: "飞行员；试点的；试行", example: "The company launched a pilot program for new employees." },
+          { word: "Regret", ipa: "/rɪˈɡret/", meaning: "后悔；遗憾", example: "I regret not preparing earlier for the speaking test." },
+          { word: "Presenter", ipa: "/prɪˈzentər/", meaning: "主持人；演讲者；展示者", example: "The presenter explained the new fitness technology clearly." },
+          { word: "Then", ipa: "/ðen/", meaning: "然后；当时；那么", example: "First, the AI collects your data, and then it gives you a training plan." },
+          { word: "Perfectly", ipa: "/ˈpɜːrfɪktli/", meaning: "完美地；完全地；非常合适地", example: "The plan is perfectly suited to beginners who need gradual progress." }
+        ]
+      },
+      {
+        category: "六、运动、身体与个性化训练表达",
+        words: [
+          { word: "Triathlete", ipa: "/traɪˈæθliːt/", meaning: "铁人三项运动员；替换原日记中的“铁人三项运动员”", example: "As a seasoned triathlete, he has a deep understanding of human limits." },
+          { word: "Genetic", ipa: "/dʒəˈnetɪk/", meaning: "基因的；遗传的；替换原日记中的“Gene”", example: "Our genetic makeup plays a crucial role in determining our physical potential." },
+          { word: "Skeletal structure", ipa: "/ˈskelɪtl ˈstrʌktʃər/", meaning: "骨骼结构；替换原日记中的“Bone shapes”", example: "The AI analyzes your skeletal structure to prevent injuries during high-intensity training." },
+          { word: "Anatomical", ipa: "/ˌænəˈtɑːmɪkl/", meaning: "解剖学的；身体结构上的；可用于概括肢体长度等身体构造数据", example: "By inputting anatomical measurements, such as limb length, the AI can customize a workout plan." },
+          { word: "Tailor-made", ipa: "/ˌteɪlər ˈmeɪd/", meaning: "定制的；完全合适的；替换 Most suitable / Perfectly suited", example: "It is fascinating to think that AI can provide a tailor-made exercise routine for every individual." }
+        ]
+      },
+      {
+        category: "七、反脆弱与职业选择表达",
+        words: [
+          { word: "Volatility", ipa: "/ˌvɑːləˈtɪləti/", meaning: "波动；易变性；替换原日记中的“Uncertainty”", example: "Instead of fearing volatility, we should learn how to thrive in an unpredictable environment." },
+          { word: "Conventional", ipa: "/kənˈvenʃənl/", meaning: "传统的；常规的；可形容传统稳定职业路径", example: "My mother prefers a conventional career path, believing it offers the most security." },
+          { word: "Intrinsic", ipa: "/ɪnˈtrɪnzɪk/", meaning: "本质的；固有的；替换 Nothing is stable 的抽象表达", example: "I argue that instability is intrinsic to the modern job market." },
+          { word: "Inherent", ipa: "/ɪnˈherənt/", meaning: "内在的；生来就有的；常用于 inherent risks", example: "I firmly believe that significant opportunities always come with inherent risks." },
+          { word: "Resilience", ipa: "/rɪˈzɪliəns/", meaning: "韧性；复原力；可表达承受压力并恢复的能力", example: "I want to demonstrate to my mother that I have the resilience to handle life's challenges." }
+        ]
+      }
+    ],
+    article: {
+      title: "No article sentences yet",
+      sentences: []
+    }
+  }
+];
+
+let currentDateIndex = studyData.length - 1;
+let currentTab = "vocabulary";
+
+const dateList = document.getElementById("dateList");
+const vocabularyPanel = document.getElementById("vocabularyPanel");
+const sentencesPanel = document.getElementById("sentencesPanel");
+const studyTitle = document.getElementById("studyTitle");
+const studyMeta = document.getElementById("studyMeta");
+const wordCount = document.getElementById("wordCount");
+const sentenceCount = document.getElementById("sentenceCount");
+const topicCount = document.getElementById("topicCount");
+
+function escapeHtml(value) {
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+function getCurrentStudy() {
+  return studyData[currentDateIndex];
+}
+
+function getAllWords(study) {
+  return study.vocabulary.flatMap(group => group.words);
+}
+
+function renderDates() {
+  dateList.innerHTML = studyData.map((study, index) => {
+    const words = getAllWords(study).length;
+    const sentences = study.article.sentences.length;
+    return `
+      <button class="date-button ${index === currentDateIndex ? "active" : ""}" type="button" data-date-index="${index}">
+        <strong>${escapeHtml(study.label)}</strong>
+        <span>${words} 个单词 / ${sentences} 个句子</span>
+      </button>
+    `;
+  }).join("");
+}
+
+function renderVocabulary(study) {
+  let runningNumber = 1;
+  vocabularyPanel.innerHTML = study.vocabulary.map(group => {
+    const cards = group.words.map(item => {
+      const number = runningNumber++;
+      return `
+        <article class="card">
+          <div class="card-top">
+            <div class="word-line">
+              <span class="num">${number}.</span>
+              <strong>${escapeHtml(item.word)}</strong>
+              <span class="ipa">${escapeHtml(item.ipa)}</span>
+              <span class="meaning">｜${escapeHtml(item.meaning)}</span>
+            </div>
+            <div class="card-actions">
+              <button class="action-button" type="button" data-speak="${escapeHtml(item.word)}" data-rate="0.78">Word</button>
+              <button class="action-button" type="button" data-speak="${escapeHtml(item.example)}" data-rate="0.82">Example</button>
+            </div>
+          </div>
+          <p class="example"><strong>Example:</strong> ${escapeHtml(item.example)}</p>
+        </article>
+      `;
+    }).join("");
+
+    return `
+      <h3 class="section-title">${escapeHtml(group.category)}</h3>
+      <div class="grid">${cards}</div>
+    `;
+  }).join("");
+}
+
+function renderSentences(study) {
+  if (study.article.sentences.length === 0) {
+    sentencesPanel.innerHTML = `
+      <h3 class="section-title">${escapeHtml(study.article.title)}</h3>
+      <div class="empty-state">今天还没有添加文章单句。你发来文章或句子后，我可以继续按这个日期追加逐句发音背诵。</div>
+    `;
+    return;
+  }
+
+  const sentenceCards = study.article.sentences.map((sentence, index) => `
+    <article class="sentence-card">
+      <div class="sentence-top">
+        <div class="sentence-text"><span class="num">${index + 1}.</span>${escapeHtml(sentence)}</div>
+        <button class="action-button" type="button" data-speak="${escapeHtml(sentence)}" data-rate="0.82">Play</button>
+      </div>
+    </article>
+  `).join("");
+
+  const cleanText = study.article.sentences
+    .map((sentence, index) => `${index + 1}. ${sentence}`)
+    .join("\n");
+
+  sentencesPanel.innerHTML = `
+    <h3 class="section-title">${escapeHtml(study.article.title)}</h3>
+    <div class="grid">${sentenceCards}</div>
+    <h3 class="section-title">Clean Practice Text</h3>
+    <pre class="clean-text">${escapeHtml(cleanText)}</pre>
+  `;
+}
+
+function renderStudy() {
+  const study = getCurrentStudy();
+  const words = getAllWords(study);
+  studyTitle.textContent = study.title;
+  studyMeta.textContent = `${study.label} · ${study.sourceNote}`;
+  wordCount.textContent = words.length;
+  sentenceCount.textContent = study.article.sentences.length;
+  topicCount.textContent = study.vocabulary.length;
+  renderDates();
+  renderVocabulary(study);
+  renderSentences(study);
+  updateTabVisibility();
+}
+
+function updateTabVisibility() {
+  document.querySelectorAll(".tab-button").forEach(button => {
+    button.classList.toggle("active", button.dataset.tab === currentTab);
+  });
+  vocabularyPanel.classList.toggle("hidden", currentTab !== "vocabulary");
+  sentencesPanel.classList.toggle("hidden", currentTab !== "sentences");
+}
+
+function getVoice() {
+  const voices = speechSynthesis.getVoices();
+  return voices.find(voice => voice.lang === "en-US") ||
+    voices.find(voice => voice.lang.startsWith("en")) ||
+    null;
+}
+
+function speak(text, rate = 0.82, cancelFirst = true) {
+  if (cancelFirst) speechSynthesis.cancel();
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = "en-US";
+  utterance.rate = rate;
+  utterance.pitch = 1;
+  const voice = getVoice();
+  if (voice) utterance.voice = voice;
+  speechSynthesis.speak(utterance);
+}
+
+function playCurrent() {
+  speechSynthesis.cancel();
+  const study = getCurrentStudy();
+  const voice = getVoice();
+  const items = currentTab === "vocabulary"
+    ? getAllWords(study).map(item => ({ text: item.word, rate: 0.78 }))
+    : study.article.sentences.map(sentence => ({ text: sentence, rate: 0.82 }));
+
+  items.forEach(item => {
+    const utterance = new SpeechSynthesisUtterance(item.text);
+    utterance.lang = "en-US";
+    utterance.rate = item.rate;
+    utterance.pitch = 1;
+    if (voice) utterance.voice = voice;
+    speechSynthesis.speak(utterance);
+  });
+}
+
+dateList.addEventListener("click", event => {
+  const button = event.target.closest("[data-date-index]");
+  if (!button) return;
+  currentDateIndex = Number(button.dataset.dateIndex);
+  speechSynthesis.cancel();
+  renderStudy();
+});
+
+document.querySelector(".tabs").addEventListener("click", event => {
+  const button = event.target.closest("[data-tab]");
+  if (!button) return;
+  currentTab = button.dataset.tab;
+  speechSynthesis.cancel();
+  updateTabVisibility();
+});
+
+document.addEventListener("click", event => {
+  const button = event.target.closest("[data-speak]");
+  if (!button) return;
+  speak(button.dataset.speak, Number(button.dataset.rate || 0.82));
+});
+
+document.getElementById("playCurrent").addEventListener("click", playCurrent);
+document.getElementById("stopAudio").addEventListener("click", () => speechSynthesis.cancel());
+
+if (speechSynthesis.onvoiceschanged !== undefined) {
+  speechSynthesis.onvoiceschanged = getVoice;
+}
+
+renderStudy();
+</script>
+</body>
+</html>
