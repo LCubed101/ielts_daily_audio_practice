@@ -174,7 +174,7 @@
 
   .stats {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 12px;
     margin: 14px 0 22px;
   }
@@ -252,6 +252,116 @@
     color: #39433e;
   }
 
+  .dashboard-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.9fr);
+    gap: 16px;
+    align-items: start;
+  }
+
+  .panel {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 16px;
+    box-shadow: 0 1px 4px rgba(31, 39, 35, 0.03);
+  }
+
+  .panel + .panel {
+    margin-top: 16px;
+  }
+
+  .panel h3 {
+    margin: 0 0 12px;
+    font-size: 18px;
+  }
+
+  .level-table {
+    width: 100%;
+    border-collapse: collapse;
+    overflow-wrap: anywhere;
+  }
+
+  .level-table th,
+  .level-table td {
+    border: 1px solid var(--line);
+    padding: 10px;
+    vertical-align: top;
+    text-align: left;
+  }
+
+  .level-table th {
+    background: #eef2ec;
+    color: #34423a;
+    font-size: 13px;
+  }
+
+  .before {
+    color: #6f4712;
+  }
+
+  .after {
+    color: var(--green-dark);
+    font-weight: 700;
+  }
+
+  .progress-list,
+  .topic-list {
+    display: grid;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .progress-item,
+  .topic-item {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 11px 12px;
+    background: #fbfcfa;
+  }
+
+  .progress-head,
+  .topic-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 7px;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    min-height: 24px;
+    border-radius: 999px;
+    padding: 3px 9px;
+    background: #e7f0f7;
+    color: #174360;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+
+  .meter {
+    height: 8px;
+    border-radius: 999px;
+    background: #e5ebe4;
+    overflow: hidden;
+  }
+
+  .meter span {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, var(--green), var(--gold));
+  }
+
+  .affirmation {
+    margin: 0;
+    color: #39433e;
+  }
+
   .clean-text {
     white-space: pre-wrap;
     background: var(--paper);
@@ -303,6 +413,10 @@
     }
 
     .stats {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .dashboard-grid {
       grid-template-columns: 1fr;
     }
 
@@ -314,6 +428,12 @@
     .card-actions .action-button,
     .sentence-top .action-button {
       justify-content: center;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .stats {
+      grid-template-columns: 1fr;
     }
   }
 </style>
@@ -331,7 +451,8 @@
   <main>
     <div class="topbar">
       <div class="tabs">
-        <button class="tab-button active" type="button" data-tab="vocabulary">单词发音</button>
+        <button class="tab-button active" type="button" data-tab="dashboard">学习看板</button>
+        <button class="tab-button" type="button" data-tab="vocabulary">单词发音</button>
         <button class="tab-button" type="button" data-tab="sentences">文章单句</button>
       </div>
       <div class="actions">
@@ -349,9 +470,11 @@
       <div class="stat"><strong id="wordCount">0</strong><span>单词</span></div>
       <div class="stat"><strong id="sentenceCount">0</strong><span>文章句子</span></div>
       <div class="stat"><strong id="topicCount">0</strong><span>单词主题</span></div>
+      <div class="stat"><strong id="upgradeCount">0</strong><span>升级表达</span></div>
     </section>
 
-    <section id="vocabularyPanel"></section>
+    <section id="dashboardPanel"></section>
+    <section id="vocabularyPanel" class="hidden"></section>
     <section id="sentencesPanel" class="hidden"></section>
   </main>
 </div>
@@ -563,6 +686,26 @@ const studyData = [
         ]
       }
     ],
+    dashboard: {
+      affirmation: "你已经不只是在背词，而是在把日记里的朴素表达升级成可迁移的 IELTS 表达。",
+      levelUps: [
+        { scene: "职业与商业", before: "upper boss", after: "skip-level manager", note: "跨级领导" },
+        { scene: "职业与商业", before: "show my pros", after: "demonstrate core competencies", note: "展示核心竞争力" },
+        { scene: "生活与人际", before: "everyone doing own thing", after: "comfortably engaged in respective activities", note: "各自舒适投入" }
+      ],
+      grammarBugs: [
+        { title: "双谓语叠加", example: "it is take 1h / is gonna to cost", status: "正在攻克", progress: 70 },
+        { title: "时态与时间状语割裂", example: "I work for him almost two months", status: "刻意练习中", progress: 54 },
+        { title: "介词后动词形式", example: "after visited WAIC", status: "已掌握", progress: 100 },
+        { title: "中式搭配直译", example: "arrive at my company", status: "持续替换中", progress: 62 }
+      ],
+      topicMap: [
+        { title: "Relationships & Lifestyle", detail: "companionship, stability, freeze this precious moment", progress: 76 },
+        { title: "Self-Growth & Mental Health", detail: "resilience, mentally drained, thrive under volatility", progress: 64 },
+        { title: "Career & Business", detail: "career path, severance package, ROI, core competencies", progress: 58 },
+        { title: "AI Fitness & Biomechanics", detail: "tailor-made routine, skeletal structure, anatomical measurements", progress: 48 }
+      ]
+    },
     article: {
       title: "No article sentences yet",
       sentences: []
@@ -571,9 +714,10 @@ const studyData = [
 ];
 
 let currentDateIndex = studyData.length - 1;
-let currentTab = "vocabulary";
+let currentTab = "dashboard";
 
 const dateList = document.getElementById("dateList");
+const dashboardPanel = document.getElementById("dashboardPanel");
 const vocabularyPanel = document.getElementById("vocabularyPanel");
 const sentencesPanel = document.getElementById("sentencesPanel");
 const studyTitle = document.getElementById("studyTitle");
@@ -581,6 +725,7 @@ const studyMeta = document.getElementById("studyMeta");
 const wordCount = document.getElementById("wordCount");
 const sentenceCount = document.getElementById("sentenceCount");
 const topicCount = document.getElementById("topicCount");
+const upgradeCount = document.getElementById("upgradeCount");
 
 function escapeHtml(value) {
   return String(value)
@@ -597,6 +742,15 @@ function getCurrentStudy() {
 
 function getAllWords(study) {
   return study.vocabulary.flatMap(group => group.words);
+}
+
+function getDashboard(study) {
+  return study.dashboard || {
+    affirmation: "这一天已经沉淀为可复习的音频材料。继续追加升级表达后，看板会自动变得更丰富。",
+    levelUps: [],
+    grammarBugs: [],
+    topicMap: []
+  };
 }
 
 function renderDates() {
@@ -643,6 +797,82 @@ function renderVocabulary(study) {
   }).join("");
 }
 
+function renderDashboard(study) {
+  const dashboard = getDashboard(study);
+  const levelRows = dashboard.levelUps.length
+    ? dashboard.levelUps.map(item => `
+      <tr>
+        <td>${escapeHtml(item.scene)}</td>
+        <td class="before">${escapeHtml(item.before)}</td>
+        <td>
+          <span class="after">${escapeHtml(item.after)}</span>
+          <div>${escapeHtml(item.note || "")}</div>
+        </td>
+      </tr>
+    `).join("")
+    : `<tr><td colspan="3">还没有添加升级表达。把老师精讲里的 Before / After 发来后，这里会变成你的进步记录。</td></tr>`;
+
+  const grammarItems = dashboard.grammarBugs.length
+    ? dashboard.grammarBugs.map(item => `
+      <li class="progress-item">
+        <div class="progress-head">
+          <strong>${escapeHtml(item.title)}</strong>
+          <span class="badge">${escapeHtml(item.status)}</span>
+        </div>
+        <div>${escapeHtml(item.example)}</div>
+        <div class="meter" aria-label="${escapeHtml(item.title)} progress"><span style="width:${Number(item.progress) || 0}%"></span></div>
+      </li>
+    `).join("")
+    : `<li class="progress-item">暂无语法点。后续可以把每节课纠过的坑记录成可视化进度。</li>`;
+
+  const topicItems = dashboard.topicMap.length
+    ? dashboard.topicMap.map(item => `
+      <li class="topic-item">
+        <div class="topic-head">
+          <strong>${escapeHtml(item.title)}</strong>
+          <span class="badge">${Number(item.progress) || 0}%</span>
+        </div>
+        <div>${escapeHtml(item.detail)}</div>
+        <div class="meter" aria-label="${escapeHtml(item.title)} mastery"><span style="width:${Number(item.progress) || 0}%"></span></div>
+      </li>
+    `).join("")
+    : `<li class="topic-item">暂无主题地图。积累到多个日记主题后，这里会显示你的表达版图。</li>`;
+
+  dashboardPanel.innerHTML = `
+    <div class="dashboard-grid">
+      <div>
+        <section class="panel">
+          <h3>Level-Up Board</h3>
+          <table class="level-table">
+            <thead>
+              <tr>
+                <th>场景</th>
+                <th>原始表达</th>
+                <th>升级表达</th>
+              </tr>
+            </thead>
+            <tbody>${levelRows}</tbody>
+          </table>
+        </section>
+        <section class="panel">
+          <h3>Grammar Bug-Squashing</h3>
+          <ul class="progress-list">${grammarItems}</ul>
+        </section>
+      </div>
+      <div>
+        <section class="panel">
+          <h3>Positive Feedback</h3>
+          <p class="affirmation">${escapeHtml(dashboard.affirmation)}</p>
+        </section>
+        <section class="panel">
+          <h3>Topic Mastery Map</h3>
+          <ul class="topic-list">${topicItems}</ul>
+        </section>
+      </div>
+    </div>
+  `;
+}
+
 function renderSentences(study) {
   if (study.article.sentences.length === 0) {
     sentencesPanel.innerHTML = `
@@ -681,7 +911,9 @@ function renderStudy() {
   wordCount.textContent = words.length;
   sentenceCount.textContent = study.article.sentences.length;
   topicCount.textContent = study.vocabulary.length;
+  upgradeCount.textContent = getDashboard(study).levelUps.length;
   renderDates();
+  renderDashboard(study);
   renderVocabulary(study);
   renderSentences(study);
   updateTabVisibility();
@@ -691,6 +923,7 @@ function updateTabVisibility() {
   document.querySelectorAll(".tab-button").forEach(button => {
     button.classList.toggle("active", button.dataset.tab === currentTab);
   });
+  dashboardPanel.classList.toggle("hidden", currentTab !== "dashboard");
   vocabularyPanel.classList.toggle("hidden", currentTab !== "vocabulary");
   sentencesPanel.classList.toggle("hidden", currentTab !== "sentences");
 }
@@ -717,9 +950,13 @@ function playCurrent() {
   speechSynthesis.cancel();
   const study = getCurrentStudy();
   const voice = getVoice();
-  const items = currentTab === "vocabulary"
-    ? getAllWords(study).map(item => ({ text: item.word, rate: 0.78 }))
-    : study.article.sentences.map(sentence => ({ text: sentence, rate: 0.82 }));
+  let items = getDashboard(study).levelUps.map(item => ({ text: item.after, rate: 0.82 }));
+  if (currentTab === "vocabulary") {
+    items = getAllWords(study).map(item => ({ text: item.word, rate: 0.78 }));
+  }
+  if (currentTab === "sentences") {
+    items = study.article.sentences.map(sentence => ({ text: sentence, rate: 0.82 }));
+  }
 
   items.forEach(item => {
     const utterance = new SpeechSynthesisUtterance(item.text);
